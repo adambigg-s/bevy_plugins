@@ -51,14 +51,20 @@ fn camera_look(
     };
 
     let delta = mouse.delta;
-    let (pitch, yaw) = (
+    let (dpitch, dyaw) = (
         -delta.y * settings.look_speed * window.scale_factor(),
         -delta.x * settings.look_speed * window.scale_factor(),
     );
 
     for mut transform in &mut query {
-        transform.rotate_local_x(pitch);
-        transform.rotate_y(yaw);
+        let (yaw, pitch, _) = transform.rotation.to_euler(EulerRot::YXZ);
+
+        transform.rotation = Quat::from_euler(
+            EulerRot::YXZ,
+            yaw + dyaw,
+            (pitch + dpitch).to_degrees().clamp(-89., 89.).to_radians(),
+            0.,
+        );
     }
 }
 
