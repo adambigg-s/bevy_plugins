@@ -1,9 +1,11 @@
 use bevy::prelude::*;
 use bevy_plugins::camera::*;
+use bevy_plugins::window::WindowManagerPlugin;
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
+        .add_plugins(WindowManagerPlugin)
         .add_plugins(CameraPlugin)
         .add_systems(Startup, scene_setup)
         .run();

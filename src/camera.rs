@@ -1,6 +1,5 @@
 use bevy::input::mouse::AccumulatedMouseMotion;
 use bevy::prelude::*;
-use bevy::window::CursorGrabMode;
 use bevy::window::PrimaryWindow;
 
 pub struct CameraPlugin;
@@ -12,7 +11,6 @@ impl Plugin for CameraPlugin {
 
         app.add_systems(Update, camera_look);
         app.add_systems(Update, camera_move);
-        app.add_systems(Update, camera_lock);
     }
 }
 
@@ -91,19 +89,5 @@ fn camera_move(
 
         let movement = accumulated_movement.normalize_or_zero();
         transform.translation += movement * settings.move_speed * time.delta_secs();
-    }
-}
-
-fn camera_lock(mut window: Query<&mut Window, With<PrimaryWindow>>, keys: Res<ButtonInput<KeyCode>>) {
-    let Ok(mut window) = window.single_mut()
-    else {
-        return;
-    };
-
-    if keys.pressed(KeyCode::KeyL) {
-        match window.cursor_options.grab_mode {
-            | CursorGrabMode::None => window.cursor_options.grab_mode = CursorGrabMode::Confined,
-            | _ => window.cursor_options.grab_mode = CursorGrabMode::None,
-        }
     }
 }
